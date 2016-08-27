@@ -1,0 +1,250 @@
+curl -XPOST 'http://192.168.109.133:9200/conac_yuqing/portals_web_data/' -d '{
+    "title":"齐齐哈尔旅游学校吧",
+    "title_not_analyzer":"齐齐哈尔旅游学校吧",
+    "media_type":1,
+    "author":"百度贴吧",
+    "discuss_number":0,
+    "transmit_number":0,
+    "publish_time_string":"2014-08-22 14:54",
+    "url":"http://tieba.baidu.com/f?kw=%E9%BD%90%E9%BD%90%E5%93%88%E5%B0%94%E6%97%85%E6%B8%B8%E5%AD%A6%E6%A0%A1&fr=wwwt",
+    "site_id":0,
+    "item_type":0,
+    "body":"亲爱的各位吧友：欢迎来到齐齐哈尔旅游学校",
+    "summary":"亲爱的各位吧友：欢迎来到齐齐哈尔旅游学校",
+    "theme_word":"齐齐哈尔旅游学校  欢迎    亲爱的  吧友",
+    "keyword":"齐齐哈尔旅游学校 欢迎    亲爱的  吧友",    
+    "emotion_polar":"0",
+    "insert_time":1408690440,
+    "source_title":"元搜索",
+    "publish_time_long":1408690440000,
+    "is_new":0
+}'
+
+
+PUT /conac_yuqing/sns_weibo_sina_person/zl0V-pGOTGytWfJ5B4Cp-A
+{
+"_index": "conac_yuqing",
+"_type": "sns_weibo_sina_person",
+"_id": "zl0V-pGOTGytWfJ5B4Cp-A",
+"_version": 1,
+"_score": 1,
+"_source": {
+"uid": 1736315190,
+"send_url": "http://weibo.com/1736315190",
+"name": "百度文库",
+"sex": "6",
+"fans_number": 694417,
+"summary": "百度文库精品专题： http://wenku.baidu.com/topic 百度文库投诉中心： http://tousu.baidu.com/wenku",
+"wb_number": 6215,
+"gz_number": 379,
+"weibo_type": "1",
+"renzheng": "0",
+"update_time": 1429179740902,
+"is_new": 0
+}
+}
+
+PUT /conac_yuqing/sns_weibo_sina_person/zl0V-pGOTGytWfJ5B4Cp-A
+{
+    "uid": 1736315190, 
+    "send_url": "http://weibo.com/1736315190", 
+    "name": "百度文库", 
+    "sex": "6", 
+    "fans_number": 694417, 
+    "summary": "百度文库精品专题： http://wenku.baidu.com/topic 百度文库投诉中心： http://tousu.baidu.com/wenku", 
+    "wb_number": 6215, 
+    "gz_number": 379, 
+    "weibo_type": "1", 
+    "renzheng": "0", 
+    "update_time": 1429179740902, 
+    "is_new": 0
+}
+
+
+
+curl -XPOST "http://localhost:9200/_search?pretty" -d'
+{
+    "query": {
+        "query_string": {
+            "query": "ford",
+            "fields": ["title"]
+        }
+    }
+}'
+
+curl http://localhost:9200/test/test/_search_with_clusters?pretty -d '
+		{
+            "search_request": {
+                "fields": ["title", "content"],
+                "query": {"match": {"_all": "data mining"}},
+                "size": 1000
+            },
+
+            "query_hint": "data mining",
+            "field_mapping": {
+                "title": ["fields.title"],
+                "content": ["fields.content"]
+            }
+        }'
+		
+curl http://localhost:9200/test/test/_search_with_clusters?pretty -d '
+		{
+            "search_request": {
+                "query_string":{
+					"query":""data mining"",
+                    "fields":["title"]
+                },
+				"from":0,
+                "size": 1000
+            },
+
+            "query_hint": "data mining",
+            "field_mapping": {
+                "title": ["fields.title"],
+                "content": ["fields.content"]
+            }
+        }'		
+		
+		
+curl http://localhost:9200/test/test/_search_with_clusters?pretty -d '
+		{
+            "search_request": {
+				"query":{
+					"query_string":{
+						"query":"data mining",
+						"fields":["title"]
+					}
+				},
+				"from":0,
+                "size": 1000
+            },
+
+            "query_hint": "data mining",
+            "field_mapping": {
+                "title": ["fields.title"],
+                "content": ["fields.content"]
+            }
+        }'		
+		
+http://172.17.80.167:9200/conac_yuqing_web/0047c9d70a934b578f9f9c4fc4591a07/_search_with_clusters/
+{
+  "search_request": {
+    "query": {
+      "query_string": {
+        "query": "百度",
+        "fields": [
+          "body"
+        ]
+      }
+    },
+    "from": 0,
+    "size": 1000
+  },
+  "query_hint": "",
+  "field_mapping": {
+    "title": [
+      "fields.title"
+    ],
+    "body": [
+      "field.body"
+    ]
+  }
+}
+		
+curl http://localhost:9200/conac_yuqing_web/0047c9d70a934b578f9f9c4fc4591a07/_search_with_clusters?pretty -d '
+		{
+            "search_request": {
+				"from":0,
+    "size":10,
+    "query":{
+        "bool":{
+            "must":[
+                {
+                    "bool":{
+                        "must":[
+                            {
+                                "term":{
+                                    "is_new":"0"
+                                }
+                            },
+                            {
+                                "term":{
+                                    "emotion_polar":"1"
+                                }
+                            },
+                            {
+                                "range":{
+                                    "publish_time_long":{
+                                        "from":1460476800000,
+                                        "to":null,
+                                        "include_lower":true,
+                                        "include_upper":false
+                                    }
+                                }
+                            },
+                            {
+                                "term":{
+                                    "deleteFlag":"0"
+                                }
+                            },
+                            {
+                                "term":{
+                                    "media_type":"8"
+                                }
+                            }
+                        ],
+                        "must_not":{
+                            "term":{
+                                "media_type":"5"
+                            }
+                        }
+                    }
+                },
+                {
+                    "bool":{
+                        "must":{
+                            "bool":{
+                                "should":{
+                                    "bool":{
+                                        "should":[
+                                            {
+                                                "query_string":{
+                                                    "query":"’阿里‘",
+                                                    "fields":[
+                                                        "title"
+                                                    ]
+                                                }
+                                            },
+                                            {
+                                                "query_string":{
+                                                    "query":"‘阿里’",
+                                                    "fields":[
+                                                        "body"
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    }
+            },
+
+            "query_hint": "data mining",
+            "field_mapping": {
+                "title": ["fields.title"],
+                "content": ["fields.content"]
+            }
+        }'	
+		
+		
+
+
+
+
+
